@@ -106,19 +106,19 @@ export class Client {
         }
     }
 
-    public async joinOrCreate<T>(roomName: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
+    public async joinOrCreate<T = any>(roomName: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
         return await this.createMatchMakeRequest<T>('joinOrCreate', roomName, options, rootSchema);
     }
 
-    public async create<T>(roomName: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
+    public async create<T = any>(roomName: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
         return await this.createMatchMakeRequest<T>('create', roomName, options, rootSchema);
     }
 
-    public async join<T>(roomName: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
+    public async join<T = any>(roomName: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
         return await this.createMatchMakeRequest<T>('join', roomName, options, rootSchema);
     }
 
-    public async joinById<T>(roomId: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
+    public async joinById<T = any>(roomId: string, options: JoinOptions = {}, rootSchema?: SchemaConstructor<T>) {
         return await this.createMatchMakeRequest<T>('joinById', roomId, options, rootSchema);
     }
 
@@ -129,7 +129,7 @@ export class Client {
      * @param rootSchema (optional) Concrete root schema definition
      * @returns Promise<Room>
      */
-    public async reconnect<T>(reconnectionToken: string, rootSchema?: SchemaConstructor<T>) {
+    public async reconnect<T = any>(reconnectionToken: string, rootSchema?: SchemaConstructor<T>) {
         if (typeof (reconnectionToken) === "string" && typeof (rootSchema) === "string") {
             throw new Error("DEPRECATED: .reconnect() now only accepts 'reconnectionToken' as argument.\nYou can get this token from previously connected `room.reconnectionToken`");
         }
@@ -140,7 +140,7 @@ export class Client {
         return await this.createMatchMakeRequest<T>('reconnect', roomId, { reconnectionToken: token }, rootSchema);
     }
 
-    public async consumeSeatReservation<T>(
+    public async consumeSeatReservation<T = any>(
         response: SeatReservation,
         rootSchema?: SchemaConstructor<T>,
         reuseRoomInstance?: Room // used in devMode
@@ -195,7 +195,7 @@ export class Client {
         });
     }
 
-    protected async createMatchMakeRequest<T>(
+    protected async createMatchMakeRequest<T = any>(
         method: string,
         roomName: string,
         options: JoinOptions = {},
@@ -224,7 +224,7 @@ export class Client {
         return await this.consumeSeatReservation<T>(response, rootSchema, reuseRoomInstance);
     }
 
-    protected createRoom<T>(roomName: string, rootSchema?: SchemaConstructor<T>) {
+    protected createRoom<T = any>(roomName: string, rootSchema?: SchemaConstructor<T>) {
         return new Room<T>(roomName, rootSchema);
     }
 

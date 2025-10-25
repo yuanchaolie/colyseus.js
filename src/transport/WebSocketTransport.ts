@@ -10,7 +10,14 @@ export class WebSocketTransport implements ITransport {
     constructor(public events: ITransportEventMap) {}
 
     public send(data: Buffer | Uint8Array): void {
-        this.ws.send(data);
+        if (typeof wx !== 'undefined' && wx.connectSocket) {
+            this.ws.send({
+                data: data,
+            });
+        }
+        else{
+            this.ws.send(data);
+        }
     }
 
     public sendUnreliable(data: ArrayBuffer | Array<number>): void {

@@ -5776,7 +5776,14 @@
             this.events = events;
         }
         send(data) {
-            this.ws.send(data);
+            if (typeof wx !== 'undefined' && wx.connectSocket) {
+                this.ws.send({
+                    data: data,
+                });
+            }
+            else {
+                this.ws.send(data);
+            }
         }
         sendUnreliable(data) {
             console.warn("colyseus.js: The WebSocket transport does not support unreliable messages");

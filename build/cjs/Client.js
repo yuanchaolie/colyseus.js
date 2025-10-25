@@ -24,7 +24,7 @@ const DEFAULT_ENDPOINT = (typeof (window) !== "undefined" && typeof ((_a = windo
     : "ws://127.0.0.1:2567";
 class Client {
     constructor(settings = DEFAULT_ENDPOINT, options) {
-        var _a, _b;
+        var _a, _b, _c;
         if (typeof (settings) === "string") {
             //
             // endpoint by url
@@ -39,7 +39,7 @@ class Client {
                 pathname: url.pathname,
                 port,
                 secure,
-                searchParams: url.searchParams.toString() || undefined,
+                searchParams: ((_a = url.searchParams) === null || _a === void 0 ? void 0 : _a.toString()) || undefined,
             };
         }
         else {
@@ -66,7 +66,7 @@ class Client {
         //
         if (!this.urlBuilder &&
             typeof (window) !== "undefined" &&
-            ((_b = (_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.hostname) === null || _b === void 0 ? void 0 : _b.includes("discordsays.com"))) {
+            ((_c = (_b = window === null || window === void 0 ? void 0 : window.location) === null || _b === void 0 ? void 0 : _b.hostname) === null || _c === void 0 ? void 0 : _c.includes("discordsays.com"))) {
             this.urlBuilder = discord.discordURLBuilder;
             console.log("Colyseus SDK: Discord Embedded SDK detected. Using custom URL builder.");
         }

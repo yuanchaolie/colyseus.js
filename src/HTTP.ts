@@ -42,6 +42,66 @@ export class HTTP {
             throw new ServerError(status, message);
         });
     }
+    protected request(method: "get" | "post" | "put" | "del", path: string, options: Partial<httpie.Options> = {}): Promise<httpie.Response> {
+      if (typeof (wx) !== 'undefined' && wx.connectSocket){
+        const wxOptions = this.getWxOptions(method, path, options);
+        return new Promise((resolve, reject) => {
+            wx.request({
+                ...wxOptions,
+                data:options.body || options.data,
+                success: (res) => {
+                  console.log(res);
+                  resolve(res);
+                },
+                fail: (err) => {
+                    reject(new Errors.ServerError(err.statusCode || -1, err.errMsg));
+                }
+            });
+        });
+      }else{
+        return httpie[method](this.client['getHttpEndpoint'](path), this.getOptions(options)).catch((e: any) => {
+            if (e.aborted) {
+                throw new AbortError("Request aborted");
+            }
+
+            const status = e.statusCode; //  || -1
+            const message = e.data?.error || e.statusMessage || e.message; //  || "offline"
+
+            if (!status && !message) {
+                throw e;
+            }
+
+            throw new ServerError(status, message);
+        });
+      }
+
+    }
+
+    protected getWxOptions(method:string, path:string, options:Partial<httpie.Options>) {
+        // 合并配置
+        const mergedOptions = {
+            ...options,
+            headers: {
+                ...this.headers,
+                ...(options.headers || {})
+            }
+        };
+
+        // 添加认证令牌
+        if (this.authToken) {
+            mergedOptions.headers['Authorization'] = `Bearer ${this.authToken}`;
+        }
+
+        // 返回微信小程序支持的格式
+        return {
+            url: this.client['getHttpEndpoint'](path),
+            method: method,
+            data: mergedOptions.body || mergedOptions.data,
+            header: mergedOptions.headers,
+            timeout: mergedOptions.timeout,
+            dataType: 'json'
+        };
+    }
 
     protected getOptions(options: Partial<httpie.Options>) {
         // merge default custom headers with user headers

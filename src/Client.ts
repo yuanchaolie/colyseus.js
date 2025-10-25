@@ -67,7 +67,7 @@ export class Client {
                 pathname: url.pathname,
                 port,
                 secure,
-                searchParams: url.searchParams.toString() || undefined,
+                searchParams: url.searchParams?.toString() || undefined,
             };
 
         } else {

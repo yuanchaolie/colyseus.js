@@ -3,7 +3,7 @@
 
 var NodeWebSocket = require('ws');
 
-const WebSocket = globalThis.WebSocket || NodeWebSocket;
+const WebSocket1 = globalThis.WebSocket || NodeWebSocket;
 class WebSocketTransport {
     constructor(events) {
         this.events = events;
@@ -46,10 +46,10 @@ class WebSocketTransport {
         else {
             // 非微信环境（Node.js 或浏览器）
             try {
-                this.ws = new WebSocket(url, { headers, protocols: this.protocols });
+                this.ws = new WebSocket1(url, { headers, protocols: this.protocols });
             }
             catch (e) {
-                this.ws = new WebSocket(url, this.protocols);
+                this.ws = new WebSocket1(url, this.protocols);
             }
             this.ws.binaryType = 'arraybuffer';
             this.ws.onopen = this.events.onopen;
